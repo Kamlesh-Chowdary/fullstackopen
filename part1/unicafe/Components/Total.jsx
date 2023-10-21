@@ -1,4 +1,8 @@
 const Total = ({ total }) => {
-  return <>All {total}</>;
+  return (
+    <>
+      <p>All {total}</p>
+    </>
+  );
 };
 export default Total;
