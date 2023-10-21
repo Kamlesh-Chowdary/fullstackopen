@@ -1,5 +1,12 @@
 import { useState } from "react";
-
+const Winner = ({ anecdotes, points }) => {
+  const highestVoteCount = Math.max(...points);
+  const winnerAnecdote = anecdotes[points.indexOf(highestVoteCount)];
+  if (highestVoteCount === 0) {
+    return <p>No Votes Yet</p>;
+  }
+  return <p>{winnerAnecdote}</p>;
+};
 const App = () => {
   const anecdotes = [
     "If it hurts, do it more often.",
@@ -13,14 +20,28 @@ const App = () => {
   ];
 
   const [selected, setSelected] = useState(0);
+  const [points, setPoints] = useState(Array(anecdotes.length).fill(0)); //inital array of votes with all zeroes
+
   const handleClick = () => {
-    setSelected(Math.floor(Math.random() * 8));
+    const rand = Math.floor(Math.random() * anecdotes.length);
+    setSelected(rand);
+  };
+
+  const handleVote = () => {
+    const copyPoints = [...points];
+    copyPoints[selected] += 1;
+    setPoints(copyPoints);
   };
 
   return (
     <div>
+      <h1>Anecdote of the day</h1>
       <p>{anecdotes[selected]}</p>
+      <p>has {points[selected]} votes</p>
+      <button onClick={handleVote}>vote</button>
       <button onClick={handleClick}>next anecdote</button>
+      <h1>Anecdote with most votes</h1>
+      <Winner anecdotes={anecdotes} points={points} />
     </div>
   );
 };
