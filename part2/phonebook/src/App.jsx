@@ -11,23 +11,43 @@ const App = () => {
 
   const addNumber = (e) => {
     e.preventDefault();
-    persons.map((ele) => {
-      if (ele.name === newName) {
-        alert(`${newName} is already added to phonebook`);
-      }
-    });
     const numberObject = {
       name: newName,
       number: newNumber,
     };
-    numberService.create(numberObject).then((returnedNumbers) => {
-      setPersons(persons.concat(returnedNumbers));
-      setNewName("");
-      setNewNumber("");
-    });
-  };
 
-  useEffect((e) => {
+    const checkName = persons.find(
+      (props) => props.name.toLowerCase() === numberObject.name.toLowerCase()
+    );
+    const changedPerson = { ...checkName, number: newNumber };
+
+    if (checkName && checkName.number === numberObject.number) {
+      window.alert(`${newName} is already added to phonebook`);
+    } else if (checkName && checkName.number !== numberObject.number) {
+      if (
+        window.confirm(
+          `${newName} is already added to phonebook, replace the old number with a new one?`
+        )
+      ) {
+        numberService
+          .update(checkName.id, changedPerson)
+          .then((returnedPerson) => {
+            setPersons(
+              persons.map((n) => (n.id !== checkName.id ? n : returnedPerson))
+            );
+            setNewName("");
+            setNewNumber("");
+          });
+      }
+    } else {
+      numberService.create(numberObject).then((returnedNumbers) => {
+        setPersons(persons.concat(returnedNumbers));
+        setNewName("");
+        setNewNumber("");
+      });
+    }
+  };
+  useEffect(() => {
     numberService.getALL().then((initialNumbers) => {
       setPersons(initialNumbers);
     });
@@ -40,8 +60,8 @@ const App = () => {
     setNewNumber(e.target.value);
   };
   const handleDelete = (e) => {
-    confirm(`Delete ${e.target.name}`);
-    numberService.deleteNumber(e.target.id);
+    const response = confirm(`Delete ${e.target.name}`);
+    if (response) numberService.deleteNumber(e.target.id);
   };
   useEffect(() => {
     numberService.getALL().then((remainingNumbers) => {

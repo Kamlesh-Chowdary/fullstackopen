@@ -5,7 +5,7 @@ const Persons = ({ persons, handleClick }) => {
   return (
     <div>
       {persons.map((ele) => (
-        <Number key={ele.id} num={ele} handleClick={handleClick} />
+        <Number key={ele.name} num={ele} handleClick={handleClick} />
       ))}
     </div>
   );
