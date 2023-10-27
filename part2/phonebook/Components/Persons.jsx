@@ -1,11 +1,11 @@
 import React from "react";
 import Number from "./Number";
 
-const Persons = ({ persons }) => {
+const Persons = ({ persons, handleClick }) => {
   return (
     <div>
       {persons.map((ele) => (
-        <Number key={ele.name} num={ele} />
+        <Number key={ele.id} num={ele} handleClick={handleClick} />
       ))}
     </div>
   );

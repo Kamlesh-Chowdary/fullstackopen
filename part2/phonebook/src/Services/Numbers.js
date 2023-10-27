@@ -12,4 +12,8 @@ const create = (numberObject) => {
   return request.then((response) => response.data);
 };
 
-export default { getALL, create };
+const deleteNumber = (id) => {
+  const request = axios.delete(`${baseUrl}/${id}`);
+  return request.then((response) => response);
+};
+export default { getALL, create, deleteNumber };

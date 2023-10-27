@@ -39,6 +39,15 @@ const App = () => {
   const handleNewNumber = (e) => {
     setNewNumber(e.target.value);
   };
+  const handleDelete = (e) => {
+    confirm(`Delete ${e.target.name}`);
+    numberService.deleteNumber(e.target.id);
+  };
+  useEffect(() => {
+    numberService.getALL().then((remainingNumbers) => {
+      setPersons(remainingNumbers);
+    });
+  });
   return (
     <div>
       <Header text="Phonebook" />
@@ -52,7 +61,7 @@ const App = () => {
         handleNewNumber={handleNewNumber}
       />
       <Header text="Numbers" />
-      <Persons persons={persons} />
+      <Persons persons={persons} handleClick={handleDelete} />
     </div>
   );
 };

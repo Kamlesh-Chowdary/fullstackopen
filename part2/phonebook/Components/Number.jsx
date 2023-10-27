@@ -1,10 +1,15 @@
 import React from "react";
-
-const Number = ({ num }) => {
+import numberService from "../src/Services/Numbers";
+const Number = ({ num, handleClick }) => {
   return (
-    <p>
-      {num.name} {num.number}
-    </p>
+    <>
+      <p>
+        {num.name} {num.number}
+      </p>
+      <button onClick={handleClick} id={num.id} name={num.name}>
+        delete
+      </button>
+    </>
   );
 };
 
