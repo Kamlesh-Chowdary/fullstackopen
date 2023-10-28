@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
+import "./index.css";
 import Header from "../Components/Header";
+import Notification from "../Components/Notification";
 import Filter from "../Components/Filter";
 import PersonForm from "../Components/PersonForm";
 import Persons from "../Components/Persons";
@@ -8,7 +10,7 @@ const App = () => {
   const [persons, setPersons] = useState([]);
   const [newName, setNewName] = useState("");
   const [newNumber, setNewNumber] = useState("");
-
+  const [message, setMessage] = useState(null);
   const addNumber = (e) => {
     e.preventDefault();
     const numberObject = {
@@ -29,6 +31,8 @@ const App = () => {
           `${newName} is already added to phonebook, replace the old number with a new one?`
         )
       ) {
+        setMessage(`${checkName.name}'s number has changed`);
+        setTimeout(() => setMessage(null), 3000);
         numberService
           .update(checkName.id, changedPerson)
           .then((returnedPerson) => {
@@ -37,9 +41,17 @@ const App = () => {
             );
             setNewName("");
             setNewNumber("");
+          })
+          .catch((error) => {
+            setMessage(
+              `Information of ${checkName.name} has already been removed from the server`
+            );
+            setTimeout(() => setMessage(null), 3000);
           });
       }
     } else {
+      setMessage(`Added ${newName}`);
+      setTimeout(() => setMessage(null), 3000);
       numberService.create(numberObject).then((returnedNumbers) => {
         setPersons(persons.concat(returnedNumbers));
         setNewName("");
@@ -71,6 +83,7 @@ const App = () => {
   return (
     <div>
       <Header text="Phonebook" />
+      <Notification message={message} />
       <Filter />
       <Header text="add a new" />
       <PersonForm

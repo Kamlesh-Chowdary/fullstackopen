@@ -1,33 +1,18 @@
 {
   "persons": [
     {
-      "name": "kamlesh",
-      "number": "89084563",
-      "id": 1
-    },
-    {
       "name": "kaaka",
-      "number": "8121430263",
+      "number": "3765",
       "id": 2
     },
     {
-      "name": "adda",
-      "number": "42545",
-      "id": 3
-    },
-    {
-      "name": "kkkkaka",
-      "number": "245436",
-      "id": 4
-    },
-    {
-      "name": "lam",
-      "number": "235",
+      "name": "kamlesh",
+      "number": " 342535",
       "id": 6
     },
     {
-      "name": "gd",
-      "number": "gsd",
+      "name": "kamle",
+      "number": "32525",
       "id": 7
     }
   ]
