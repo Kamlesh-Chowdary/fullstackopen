@@ -63,7 +63,7 @@ const App = () => {
     numberService.getALL().then((initialNumbers) => {
       setPersons(initialNumbers);
     });
-  }, []);
+  }, [persons]);
 
   const handleChange = (e) => {
     setNewName(e.target.value);
@@ -75,11 +75,16 @@ const App = () => {
     const response = confirm(`Delete ${e.target.name}`);
     if (response) numberService.deleteNumber(e.target.id);
   };
-  useEffect(() => {
+  {
+    /*This useEffect() can be ignored if persons is passed as 2nd parameter. As the page gets re-rendered once the value of persons is changed due to the 2nd parameter */
+  }
+  {
+    /*useEffect(() => {
     numberService.getALL().then((remainingNumbers) => {
       setPersons(remainingNumbers);
     });
-  });
+  });*/
+  }
   return (
     <div>
       <Header text="Phonebook" />
