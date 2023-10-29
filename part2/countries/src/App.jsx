@@ -12,6 +12,7 @@ const App = () => {
       setCountries(response);
     });
   }, []);
+
   const handleChange = (event) => {
     setSearchCountry(event.target.value);
   };
