@@ -1,7 +1,8 @@
 const express = require("express");
 const app = express();
+const PORT = 3001;
 
-let notes = [
+let entries = [
   {
     id: 1,
     name: "Arto Hellas",
@@ -24,10 +25,30 @@ let notes = [
   },
 ];
 
-app.get("/api/persons", (req, res) => {
-  res.json(notes);
+app.use((req, res, next) => {
+  req.requestTime = new Date();
+  req.phonebookCount = entries.length;
+  next();
 });
 
-const PORT = 3001;
+app.get("/api/persons", (req, res) => {
+  res.json(entries);
+});
+
+app.get("/info", (req, res) => {
+  const responseText = `<p>Phonebook has info for ${req.phonebookCount} people,<br>${req.requestTime} `;
+  res.send(responseText);
+});
+
+app.get("/api/persons/:id", (req, res) => {
+  const userId = Number(req.params.id);
+  const responseText = entries.find((note) => note.id === userId);
+
+  if (responseText) {
+    res.json(responseText);
+  } else {
+    res.status(404).end();
+  }
+});
 
 app.listen(PORT);
