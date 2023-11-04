@@ -2,6 +2,10 @@ const express = require("express");
 const app = express();
 const PORT = 3001;
 
+const generateRandomId = () => {
+  return Math.floor(Math.random() * 5123);
+};
+
 let entries = [
   {
     id: 1,
@@ -31,24 +35,50 @@ app.use((req, res, next) => {
   next();
 });
 
+app.use(express.json());
+
 app.get("/api/persons", (req, res) => {
   res.json(entries);
 });
 
 app.get("/info", (req, res) => {
-  const responseText = `<p>Phonebook has info for ${req.phonebookCount} people,<br>${req.requestTime} `;
-  res.send(responseText);
+  const singleEntry = `<p>Phonebook has info for ${req.phonebookCount} people,<br>${req.requestTime} `;
+  res.send(singleEntry);
 });
 
 app.get("/api/persons/:id", (req, res) => {
-  const userId = Number(req.params.id);
-  const responseText = entries.find((note) => note.id === userId);
-
-  if (responseText) {
-    res.json(responseText);
+  const id = Number(req.params.id);
+  const singleEntry = entries.find((entry) => entry.id === id);
+  if (singleEntry) {
+    res.json(singleEntry);
   } else {
     res.status(404).end();
   }
+});
+
+app.delete("/api/persons/:id", (req, res) => {
+  const id = Number(req.params.id);
+  remainingEntries = entries.filter((entry) => entry.id !== id);
+  res.status(204).end();
+});
+
+app.post("/api/persons", (req, res) => {
+  const body = req.body;
+  const duplicateEntry = entries.find((entry) => entry.name === body.name);
+
+  if (!body.name || !body.number) {
+    return res.status(400).json({ error: "name or number missing" });
+  }
+  if (duplicateEntry) {
+    return res.status(400).json({ error: "name must be unique" });
+  }
+  const entry = {
+    id: generateRandomId(),
+    name: body.name,
+    number: body.number,
+  };
+
+  entries = entries.concat(entry);
 });
 
 app.listen(PORT);
