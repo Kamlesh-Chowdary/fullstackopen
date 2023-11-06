@@ -1,6 +1,11 @@
 const express = require("express");
+const morgan = require("morgan");
+const cors = require("cors");
+
 const app = express();
-const PORT = 3001;
+const PORT = process.env.PORT || 3001;
+app.use(cors());
+app.use(morgan("tiny"));
 
 const generateRandomId = () => {
   return Math.floor(Math.random() * 5123);
@@ -58,12 +63,21 @@ app.get("/api/persons/:id", (req, res) => {
 
 app.delete("/api/persons/:id", (req, res) => {
   const id = Number(req.params.id);
-  remainingEntries = entries.filter((entry) => entry.id !== id);
-  res.status(204).end();
+  const updatedEntries = entries.filter((entry) => entry.id !== id);
+
+  if (updatedEntries.length < entries.length) {
+    // Deletion was successful
+    entries = updatedEntries;
+    res.json(entries);
+  } else {
+    // Deletion failed, return an error response
+    res.status(400).json({ error: "Entry not found" });
+  }
 });
 
 app.post("/api/persons", (req, res) => {
   const body = req.body;
+  console.log(body);
   const duplicateEntry = entries.find((entry) => entry.name === body.name);
 
   if (!body.name || !body.number) {
@@ -79,6 +93,7 @@ app.post("/api/persons", (req, res) => {
   };
 
   entries = entries.concat(entry);
+  res.json(entry);
 });
 
 app.listen(PORT);

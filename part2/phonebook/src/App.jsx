@@ -11,6 +11,7 @@ const App = () => {
   const [newName, setNewName] = useState("");
   const [newNumber, setNewNumber] = useState("");
   const [message, setMessage] = useState(null);
+
   const addNumber = (e) => {
     e.preventDefault();
     const numberObject = {
@@ -47,6 +48,8 @@ const App = () => {
               `Information of ${checkName.name} has already been removed from the server`
             );
             setTimeout(() => setMessage(null), 3000);
+            setNewName("");
+            setNewNumber("");
           });
       }
     } else {
@@ -59,11 +62,12 @@ const App = () => {
       });
     }
   };
+
   useEffect(() => {
     numberService.getALL().then((initialNumbers) => {
       setPersons(initialNumbers);
     });
-  }, [persons]);
+  }, []);
 
   const handleChange = (e) => {
     setNewName(e.target.value);
@@ -73,7 +77,11 @@ const App = () => {
   };
   const handleDelete = (e) => {
     const response = confirm(`Delete ${e.target.name}`);
-    if (response) numberService.deleteNumber(e.target.id);
+
+    if (response)
+      numberService.deleteNumber(e.target.id).then((remainingNumbers) => {
+        setPersons(remainingNumbers);
+      });
   };
   {
     /*This useEffect() can be ignored if persons is passed as 2nd parameter. As the page gets re-rendered once the value of persons is changed due to the 2nd parameter */
