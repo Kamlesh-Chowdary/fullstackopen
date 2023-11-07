@@ -4,7 +4,7 @@ const cors = require("cors");
 
 const app = express();
 const PORT = 3001;
-app.use(cors());
+app.use(cors({ origin: "https://phonebookbackend-ryi5.onrender.com/" }));
 app.use(morgan("tiny"));
 
 const generateRandomId = () => {
@@ -41,7 +41,9 @@ app.use((req, res, next) => {
 });
 
 app.use(express.json());
-
+app.get("/", (req, res) => {
+  res.json(entries);
+});
 app.get("/api/persons", (req, res) => {
   res.json(entries);
 });
