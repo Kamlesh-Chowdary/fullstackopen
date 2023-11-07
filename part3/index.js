@@ -4,7 +4,7 @@ const cors = require("cors");
 
 const app = express();
 const PORT = 3001;
-app.use(cors({ origin: "https://http://localhost:3000/" }));
+app.use(cors({ origin: "http://localhost:3000/" }));
 app.use(morgan("tiny"));
 
 const generateRandomId = () => {
