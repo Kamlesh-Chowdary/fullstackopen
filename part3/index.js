@@ -1,20 +1,17 @@
 const express = require("express");
 const morgan = require("morgan");
 const cors = require("cors");
+const Person = require("./models/person.js");
 
+require("dotenv").config;
+
+const PORT = process.env.PORT;
 const app = express();
-const PORT = 3001;
 
-const corsOptions = {
-  origin: "http://localhost:3000",
-  methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
-};
-
-app.use(cors(corsOptions));
+app.use(cors());
 app.use(morgan("tiny"));
-
-const generateRandomId = () => {
-  return Math.floor(Math.random() * 5123);
+const unknownEndpoint = (request, response) => {
+  response.status(404).send({ error: "unknown endpoint" });
 };
 
 let entries = [
@@ -40,18 +37,20 @@ let entries = [
   },
 ];
 
-app.use((req, res, next) => {
+app.use(async (req, res, next) => {
   req.requestTime = new Date();
-  req.phonebookCount = entries.length;
+  req.phonebookCount = await Person.find({}).then((result) => {
+    return result.length;
+  });
   next();
 });
 
 app.use(express.json());
-app.get("/", (req, res) => {
-  res.json(entries);
-});
+
 app.get("/api/persons", (req, res) => {
-  res.json(entries);
+  Person.find({}).then((result) => {
+    res.send(result);
+  });
 });
 
 app.get("/info", (req, res) => {
@@ -61,7 +60,7 @@ app.get("/info", (req, res) => {
 
 app.get("/api/persons/:id", (req, res) => {
   const id = Number(req.params.id);
-  const singleEntry = entries.find((entry) => entry.id === id);
+  const singleEntry = Person.findById(id).then((res) => res);
   if (singleEntry) {
     res.json(singleEntry);
   } else {
@@ -85,23 +84,21 @@ app.delete("/api/persons/:id", (req, res) => {
 
 app.post("/api/persons", (req, res) => {
   const body = req.body;
-  console.log(body);
+
   const duplicateEntry = entries.find((entry) => entry.name === body.name);
 
-  if (!body.name || !body.number) {
+  if (body.name === undefined) {
     return res.status(400).json({ error: "name or number missing" });
   }
   if (duplicateEntry) {
     return res.status(400).json({ error: "name must be unique" });
   }
-  const entry = {
-    id: generateRandomId(),
+  const entry = new Person({
     name: body.name,
     number: body.number,
-  };
+  });
 
-  entries = entries.concat(entry);
-  res.json(entry);
+  entry.save().then((result) => res.send(result));
 });
-
+app.use(unknownEndpoint);
 app.listen(PORT);
