@@ -68,18 +68,22 @@ app.get("/api/persons/:id", (req, res) => {
   }
 });
 
+// app.put("/api/persons/:id", (req, res)=>{
+//   const id = Number(req.params.id);
+//   const updatedEntries =
+// })
+
 app.delete("/api/persons/:id", (req, res) => {
   const id = Number(req.params.id);
-  const updatedEntries = entries.filter((entry) => entry.id !== id);
+  // const updatedEntries = entries.filter((entry) => entry.id !== id);
 
-  if (updatedEntries.length < entries.length) {
-    // Deletion was successful
-    entries = updatedEntries;
-    res.json(entries);
-  } else {
-    // Deletion failed, return an error response
-    res.status(400).json({ error: "Entry not found" });
-  }
+  Person.findByIdAndDelete(id)
+    .then(() => {
+      res.status(204).end();
+    })
+    .catch((error) => {
+      return error;
+    });
 });
 
 app.post("/api/persons", (req, res) => {

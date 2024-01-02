@@ -6,12 +6,18 @@ import Filter from "../Components/Filter";
 import PersonForm from "../Components/PersonForm";
 import Persons from "../Components/Persons";
 import numberService from "./Services/Numbers";
+
 const App = () => {
   const [persons, setPersons] = useState([]);
   const [newName, setNewName] = useState("");
   const [newNumber, setNewNumber] = useState("");
   const [message, setMessage] = useState(null);
 
+  useEffect(() => {
+    numberService.getALL().then((initialNumbers) => {
+      setPersons(initialNumbers);
+    });
+  }, []);
   const addNumber = (e) => {
     e.preventDefault();
     const numberObject = {
@@ -63,12 +69,6 @@ const App = () => {
     }
   };
 
-  useEffect(() => {
-    numberService.getALL().then((initialNumbers) => {
-      setPersons(initialNumbers);
-    });
-  }, []);
-
   const handleChange = (e) => {
     setNewName(e.target.value);
   };
@@ -84,16 +84,7 @@ const App = () => {
         setPersons(remainingNumbers);
       });
   };
-  {
-    /*This useEffect() can be ignored if persons is passed as 2nd parameter. As the page gets re-rendered once the value of persons is changed due to the 2nd parameter */
-  }
-  {
-    /*useEffect(() => {
-    numberService.getALL().then((remainingNumbers) => {
-      setPersons(remainingNumbers);
-    });
-  });*/
-  }
+
   return (
     <div>
       <Header text="Phonebook" />
