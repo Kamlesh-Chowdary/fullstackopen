@@ -1,114 +1,48 @@
-import { useEffect, useState } from "react";
-import "./index.css";
-import Header from "../Components/Header";
-import Notification from "../Components/Notification";
-import Filter from "../Components/Filter";
-import PersonForm from "../Components/PersonForm";
-import Persons from "../Components/Persons";
-import numberService from "./Services/Numbers";
+import { useState } from "react";
+
 const App = () => {
-  const [persons, setPersons] = useState([]);
+  const [persons, setPersons] = useState([{ name: "Arto Hellas" }]);
   const [newName, setNewName] = useState("");
-  const [newNumber, setNewNumber] = useState("");
-  const [message, setMessage] = useState(null);
 
   const addNumber = (e) => {
     e.preventDefault();
-    const numberObject = {
+    const personObject = {
       name: newName,
-      number: newNumber,
     };
+    const person = persons.find((p) => {
+      return p.name === newName;
+    });
 
-    const checkName = persons.find(
-      (props) => props.name.toLowerCase() === numberObject.name.toLowerCase()
-    );
-
-    const changedPerson = { ...checkName, number: newNumber };
-
-    if (checkName && checkName.number === numberObject.number) {
-      window.alert(`${newName} is already added to phonebook`);
-    } else if (checkName && checkName.number !== numberObject.number) {
-      if (
-        window.confirm(
-          `${newName} is already added to phonebook, replace the old number with a new one?`
-        )
-      ) {
-        numberService
-          .update(checkName.id, changedPerson)
-          .then((returnedPerson) => {
-            setPersons(
-              persons.map((n) => (n.id !== checkName.id ? n : returnedPerson))
-            );
-            setNewName("");
-            setNewNumber("");
-            setMessage(`${checkName.name}'s number has changed`);
-          })
-          .catch((error) => {
-            setMessage(
-              `Information of ${checkName.name} has already been removed from the server`
-            );
-            setTimeout(() => setMessage(null), 3000);
-            setNewName("");
-            setNewNumber("");
-          });
-      }
+    if (person) {
+      alert(`${person.name} is alreay added to the phonebook.`);
     } else {
-      setMessage(`Added ${newName}`);
-      setTimeout(() => setMessage(null), 3000);
-      numberService.create(numberObject).then((returnedNumbers) => {
-        setPersons(persons.concat(returnedNumbers));
-        setNewName("");
-        setNewNumber("");
-      });
+      setPersons(persons.concat(personObject));
+      setNewName("");
     }
   };
-
-  useEffect(() => {
-    numberService.getALL().then((initialNumbers) => {
-      setPersons(initialNumbers);
-    });
-  }, []);
 
   const handleChange = (e) => {
     setNewName(e.target.value);
   };
-  const handleNewNumber = (e) => {
-    setNewNumber(e.target.value);
-  };
-  const handleDelete = (e) => {
-    const response = confirm(`Delete ${e.target.name}`);
 
-    if (response)
-      numberService.deleteNumber(e.target.id).then((remainingNumbers) => {
-        console.log(remainingNumbers);
-        setPersons(remainingNumbers);
-      });
-  };
-  {
-    /*This useEffect() can be ignored if persons is passed as 2nd parameter. As the page gets re-rendered once the value of persons is changed due to the 2nd parameter */
-  }
-  {
-    /*useEffect(() => {
-    numberService.getALL().then((remainingNumbers) => {
-      setPersons(remainingNumbers);
-    });
-  });*/
-  }
   return (
     <div>
-      <Header text="Phonebook" />
-      <Notification message={message} />
-      <Filter />
-      <Header text="add a new" />
-      <PersonForm
-        addNumber={addNumber}
-        newName={newName}
-        handleChange={handleChange}
-        newNumber={newNumber}
-        handleNewNumber={handleNewNumber}
-      />
-      <Header text="Numbers" />
-      <Persons persons={persons} handleClick={handleDelete} />
+      <h2>Phonebook</h2>
+      <form>
+        <div>
+          name: <input value={newName} onChange={handleChange} />
+        </div>
+        <div>
+          <button type="submit" onClick={addNumber}>
+            add
+          </button>
+        </div>
+      </form>
+      <h2>Numbers</h2>
+
+      {persons.map((person, key) => {
+        return <p key={key}>{person.name}</p>;
+      })}
     </div>
   );
 };
