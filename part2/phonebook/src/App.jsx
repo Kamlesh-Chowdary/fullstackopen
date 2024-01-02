@@ -22,6 +22,7 @@ const App = () => {
     const checkName = persons.find(
       (props) => props.name.toLowerCase() === numberObject.name.toLowerCase()
     );
+
     const changedPerson = { ...checkName, number: newNumber };
 
     if (checkName && checkName.number === numberObject.number) {
@@ -32,8 +33,6 @@ const App = () => {
           `${newName} is already added to phonebook, replace the old number with a new one?`
         )
       ) {
-        setMessage(`${checkName.name}'s number has changed`);
-        setTimeout(() => setMessage(null), 3000);
         numberService
           .update(checkName.id, changedPerson)
           .then((returnedPerson) => {
@@ -42,6 +41,7 @@ const App = () => {
             );
             setNewName("");
             setNewNumber("");
+            setMessage(`${checkName.name}'s number has changed`);
           })
           .catch((error) => {
             setMessage(
@@ -80,6 +80,7 @@ const App = () => {
 
     if (response)
       numberService.deleteNumber(e.target.id).then((remainingNumbers) => {
+        console.log(remainingNumbers);
         setPersons(remainingNumbers);
       });
   };

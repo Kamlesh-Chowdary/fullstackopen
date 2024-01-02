@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 
 const password = process.argv[2];
 
-const url = `mongodb+srv://kamlesh:${password}@cluster0.ovhquw0.mongodb.net/`;
+const url = `mongodb+srv://kamlesh:${password}@cluster0.ovhquw0.mongodb.net/?retryWrites=true&w=majority`;
 mongoose.connect(url);
 mongoose.set("strictQuery", false);
 const entrySchema = mongoose.Schema({
