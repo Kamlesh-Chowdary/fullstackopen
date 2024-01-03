@@ -4,12 +4,15 @@ import Header from "../Components/Header";
 import Filter from "../Components/Filter";
 import PersonForm from "../Components/PersonForm";
 import Persons from "../Components/Persons";
+
 import Notification from "../Components/Notification";
+
 
 const App = () => {
   const [persons, setPersons] = useState([]);
   const [newName, setNewName] = useState("");
   const [newNumber, setNewNumber] = useState("");
+
   const [filterName, setNewFilter] = useState("");
   const [notification, setNotification] = useState({ message: null });
   useEffect(() => {
@@ -38,6 +41,8 @@ const App = () => {
     setNewNumber("");
   };
 
+
+  
   const addNumber = (e) => {
     e.preventDefault();
     const personObject = {
@@ -104,6 +109,8 @@ const App = () => {
   const personsToShow = filterName ? persons.filter(byFilterField) : persons;
 
   const handleNameChange = (e) => {
+
+
     setNewName(e.target.value);
   };
   const handleNumberChange = (e) => {
@@ -111,16 +118,21 @@ const App = () => {
   };
   const handleFilterChange = (e) => {
     setNewFilter(e.target.value);
+
   };
   return (
     <div>
       <Header text="Phonebook" />
       <Notification message={notification} />
+
+ 
       <Filter
         text="Filter shown with"
         value={filterName}
         onChange={handleFilterChange}
       />
+
+
       <PersonForm
         addNumber={addNumber}
         newName={newName}
@@ -129,8 +141,11 @@ const App = () => {
         handleNumberChange={handleNumberChange}
       />
 
+
       <Header text="Numbers " />
       <Persons persons={personsToShow} deleteNumber={deleteNumber} />
+
+     
     </div>
   );
 };
