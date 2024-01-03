@@ -1,19 +1,8 @@
 {
   "persons": [
-    {
-      "name": "kaaka",
-      "number": "3765",
-      "id": 1
-    },
-    {
-      "name": "kamleshsaf",
-      "number": "34636",
-      "id": 2
-    },
-    {
-      "name": "lam",
-      "number": "476475",
-      "id": 3
-    }
+    { "name": "Arto Hellas", "number": "040-123456", "id": 1 },
+    { "name": "Ada Lovelace", "number": "39-44-5323523", "id": 2 },
+    { "name": "Dan Abramov", "number": "12-43-234345", "id": 3 },
+    { "name": "Mary Poppendieck", "number": "39-23-6423122", "id": 4 }
   ]
 }
