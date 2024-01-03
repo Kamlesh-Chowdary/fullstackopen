@@ -1,13 +1,11 @@
 import React from "react";
 
-const Filter = () => {
+const Filter = ({ text, value, onChange }) => {
   return (
-    <form>
-      <div>
-        filter shown with
-        <input />
-      </div>
-    </form>
+    <>
+      {text}
+      <input value={value} onChange={onChange} />
+    </>
   );
 };
 

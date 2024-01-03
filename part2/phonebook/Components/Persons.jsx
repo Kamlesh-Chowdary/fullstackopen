@@ -4,9 +4,13 @@ import Number from "./Number";
 const Persons = ({ persons, handleClick }) => {
   return (
     <div>
-      {persons.map((ele) => (
-        <Number key={ele.name} num={ele} handleClick={handleClick} />
-      ))}
+      {persons.map((person, key) => {
+        return (
+          <p key={key}>
+            {person.name} {person.number}
+          </p>
+        );
+      })}
     </div>
   );
 };
