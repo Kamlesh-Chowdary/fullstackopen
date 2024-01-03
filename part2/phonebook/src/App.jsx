@@ -12,7 +12,7 @@ const App = () => {
   const [newName, setNewName] = useState("");
   const [newNumber, setNewNumber] = useState("");
   const [message, setMessage] = useState(null);
-
+  const [filterName, setNewFilter] = useState("");
   useEffect(() => {
     numberService.getALL().then((initialNumbers) => {
       setPersons(initialNumbers);
@@ -75,6 +75,10 @@ const App = () => {
   const handleNewNumber = (e) => {
     setNewNumber(e.target.value);
   };
+  const handleFilterChange = (e) => {
+    setNewFilter(e.target.value);
+  };
+
   const handleDelete = (e) => {
     const response = confirm(`Delete ${e.target.name}`);
 
@@ -84,12 +88,20 @@ const App = () => {
         setPersons(remainingNumbers);
       });
   };
+  const byFilterField = (p) => {
+    p.name.toLowerCase().includes(filterName.toLowerCase());
+  };
 
+  const personsToShow = filterName ? persons.filter(byFilterField) : persons;
   return (
     <div>
       <Header text="Phonebook" />
       <Notification message={message} />
-      <Filter />
+      <Filter
+        text="Filter shown with"
+        value={filterName}
+        onChange={handleFilterChange}
+      />
       <Header text="add a new" />
       <PersonForm
         addNumber={addNumber}
@@ -99,7 +111,7 @@ const App = () => {
         handleNewNumber={handleNewNumber}
       />
       <Header text="Numbers" />
-      <Persons persons={persons} handleClick={handleDelete} />
+      <Persons persons={personsToShow} handleClick={handleDelete} />
     </div>
   );
 };
