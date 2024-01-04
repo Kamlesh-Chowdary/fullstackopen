@@ -11,7 +11,7 @@ const App = () => {
   const [newName, setNewName] = useState("");
   const [newNumber, setNewNumber] = useState("");
   const [filterName, setNewFilter] = useState("");
-  const [notification, setNotification] = useState(null);
+  const [notification, setNotification] = useState({ message: null });
   useEffect(() => {
     personService
       .getAll()
@@ -23,6 +23,16 @@ const App = () => {
         return error;
       });
   }, []);
+
+  const notifyWith = (message, type = "info") => {
+    setTimeout(() => {
+      setNotification({ message, type });
+    }, 0);
+    setTimeout(() => {
+      setNotification({ message: null });
+    }, 3000);
+  };
+
   const clearForm = () => {
     setNewName("");
     setNewNumber("");
@@ -48,12 +58,7 @@ const App = () => {
         .catch((error) => {
           return error;
         });
-      setTimeout(() => {
-        setNotification(`Added ${newName}`);
-      }, 0);
-      setTimeout(() => {
-        setNotification(null);
-      }, 3000);
+      notifyWith(`Added ${newName}`);
     }
     clearForm();
   };
@@ -65,6 +70,7 @@ const App = () => {
       personService.remove(id).then(() => {
         setPersons(persons.filter((p) => p.id !== id));
       });
+      notifyWith(`number of ${person.name} is deleted!`);
     }
   };
 
@@ -77,11 +83,18 @@ const App = () => {
       number: newNumber,
     };
     if (ok) {
-      personService.update(person.id, updatedPerson).then((updatedPerson) => {
-        setPersons(
-          persons.map((p) => (p.id !== person.id ? p : updatedPerson))
-        );
-      });
+      personService
+        .update(person.id, updatedPerson)
+        .then((updatedPerson) => {
+          setPersons(
+            persons.map((p) => (p.id !== person.id ? p : updatedPerson))
+          );
+          notifyWith(`Phonenumber of ${person.name} has been updated!`);
+        })
+        .catch(() => {
+          notifyWith(`${person.name} has already been removed`, "error");
+          setPersons(persons.filter((p) => p.id !== person.id));
+        });
     }
   };
 
