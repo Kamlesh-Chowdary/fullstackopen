@@ -5,7 +5,6 @@ import Notification from "../Components/Notification";
 import Filter from "../Components/Filter";
 import PersonForm from "../Components/PersonForm";
 import Persons from "../Components/Persons";
-import numberService from "./Services/Numbers";
 
 const App = () => {
   const [persons, setPersons] = useState([]);
