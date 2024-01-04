@@ -34,9 +34,8 @@ const App = () => {
     const person = persons.find((p) => {
       return p.name === newName;
     });
-
     if (person) {
-      alert(`${person.name} is alreay added to the phonebook.`);
+      updatePerson(person);
     } else {
       personService
         .create(personObject)
@@ -46,8 +45,8 @@ const App = () => {
         .catch((error) => {
           return error;
         });
-      clearForm();
     }
+    clearForm();
   };
 
   const deleteNumber = (person) => {
@@ -56,6 +55,23 @@ const App = () => {
     if (confirm) {
       personService.remove(id).then(() => {
         setPersons(persons.filter((p) => p.id !== id));
+      });
+    }
+  };
+
+  const updatePerson = (person) => {
+    const ok = window.confirm(
+      `${person.name} is alreay added to the phonebook, replace the old number with a new one?`
+    );
+    const updatedPerson = {
+      ...person,
+      number: newNumber,
+    };
+    if (ok) {
+      personService.update(person.id, updatedPerson).then((updatedPerson) => {
+        setPersons(
+          persons.map((p) => (p.id !== person.id ? p : updatedPerson))
+        );
       });
     }
   };
