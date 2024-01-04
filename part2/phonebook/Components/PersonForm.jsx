@@ -6,6 +6,7 @@ const PersonForm = ({
   handleNameChange,
   newNumber,
   handleNumberChange,
+  deleteNumber,
 }) => {
   return (
     <form onSubmit={addNumber}>

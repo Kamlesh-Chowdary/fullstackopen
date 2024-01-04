@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import Numbers from "./Services/Numbers";
+import personService from "./Services/Numbers";
 import Header from "../Components/Header";
 import Filter from "../Components/Filter";
 import PersonForm from "../Components/PersonForm";
@@ -9,9 +9,9 @@ const App = () => {
   const [newName, setNewName] = useState("");
   const [newNumber, setNewNumber] = useState("");
   const [filterName, setNewFilter] = useState("");
-
   useEffect(() => {
-    Numbers.getAll()
+    personService
+      .getAll()
       .then((initialData) => {
         setPersons(initialData);
       })
@@ -19,8 +19,7 @@ const App = () => {
         console.log("ERROR");
         return error;
       });
-  });
-
+  }, []);
   const clearForm = () => {
     setNewName("");
     setNewNumber("");
@@ -39,7 +38,8 @@ const App = () => {
     if (person) {
       alert(`${person.name} is alreay added to the phonebook.`);
     } else {
-      Numbers.create(personObject)
+      personService
+        .create(personObject)
         .then((returnedNumber) => {
           setPersons(persons.concat(returnedNumber));
         })
@@ -49,6 +49,17 @@ const App = () => {
       clearForm();
     }
   };
+
+  const deleteNumber = (person) => {
+    const id = person.id;
+    const confirm = window.confirm(`Delete ${person.name} from phonebook?`);
+    if (confirm) {
+      personService.remove(id).then(() => {
+        setPersons(persons.filter((p) => p.id !== id));
+      });
+    }
+  };
+
   const byFilterField = (p) =>
     p.name.toLowerCase().includes(filterName.toLowerCase());
 
@@ -79,8 +90,8 @@ const App = () => {
         handleNumberChange={handleNumberChange}
       />
 
-      <Header text="Numbers" />
-      <Persons persons={personsToShow} />
+      <Header text="Numbers " />
+      <Persons persons={personsToShow} deleteNumber={deleteNumber} />
     </div>
   );
 };
