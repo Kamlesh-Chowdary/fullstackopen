@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import axios from "axios";
+import Numbers from "./Services/Numbers";
 import Header from "../Components/Header";
 import Filter from "../Components/Filter";
 import PersonForm from "../Components/PersonForm";
@@ -11,13 +11,20 @@ const App = () => {
   const [filterName, setNewFilter] = useState("");
 
   useEffect(() => {
-    axios
-      .get("http://localhost:3001/persons")
-      .then((response) => {
-        setPersons(response.data);
+    Numbers.getAll()
+      .then((initialData) => {
+        setPersons(initialData);
       })
-      .catch((error) => error);
-  }, []);
+      .catch((error) => {
+        console.log("ERROR");
+        return error;
+      });
+  });
+
+  const clearForm = () => {
+    setNewName("");
+    setNewNumber("");
+  };
 
   const addNumber = (e) => {
     e.preventDefault();
@@ -32,13 +39,14 @@ const App = () => {
     if (person) {
       alert(`${person.name} is alreay added to the phonebook.`);
     } else {
-      axios
-        .post("http://localhost:3001/persons", personObject)
-        .then((response) => {
-          setPersons(persons.concat(personObject));
-          setNewName("");
-          setNewNumber("");
+      Numbers.create(personObject)
+        .then((returnedNumber) => {
+          setPersons(persons.concat(returnedNumber));
+        })
+        .catch((error) => {
+          return error;
         });
+      clearForm();
     }
   };
   const byFilterField = (p) =>
