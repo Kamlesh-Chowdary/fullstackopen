@@ -37,7 +37,15 @@ app.get("/info", (req, res) => {
   res.send(data);
 });
 
-
+app.get("/api/persons/:id", (req, res) => {
+  const id = Number(req.params.id);
+  const person = persons.find((p) => p.id === id);
+  if (person) {
+    res.send(person);
+  } else {
+    res.status(404).send("This url can't be reached");
+  }
+});
 
 app.delete("/api/persons/:id", (req, res) => {
   const id = Number(req.params.id);
