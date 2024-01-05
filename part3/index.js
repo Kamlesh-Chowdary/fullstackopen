@@ -53,7 +53,19 @@ app.delete("/api/persons/:id", (req, res) => {
   res.status(204).end();
 });
 
-
+app.post("/api/persons/", (req, res) => {
+  const newPerson = req.body;
+  if (!newPerson.name || !newPerson.number) {
+    return res.status(400).json({
+      error: "The name or number is missing",
+    });
+  } else if (
+    persons.find((p) => p.name.toLowerCase() === newPerson.name.toLowerCase())
+  ) {
+    return res.status(400).json({
+      error: "name must be unique",
+    });
+  }
 
   const maxId = persons.length > 0 ? Math.max(...persons.map((p) => p.id)) : 0;
   newPerson.id = maxId + 1;
