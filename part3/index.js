@@ -72,7 +72,11 @@ app.post("/api/persons/", (req, res) => {
   persons = persons.concat(newPerson);
   res.status(202).send(newPerson);
 });
+const unknownEndPoint = (req, res)=>{
+  res.status(404).send({error: "Unknown End Point"});
+}
 
+app.use(unknownEndPoint);
 const PORT = 3001;
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
