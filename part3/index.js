@@ -1,6 +1,8 @@
 const express = require("express");
 const app = express();
 
+app.use(express.json());
+
 let persons = [
   {
     id: 1,
@@ -48,6 +50,15 @@ app.delete("/api/persons/:id", (req, res) => {
   const id = Number(req.params.id);
   persons = persons.filter((p) => p.id !== id);
   res.status(204).end();
+});
+
+app.post("/api/persons/", (req, res) => {
+  const newPerson = req.body;
+  console.log(req.body);
+  const maxId = persons.length > 0 ? Math.max(...persons.map((p) => p.id)) : 0;
+  newPerson.id = maxId + 1;
+  persons = persons.concat(newPerson);
+  res.status(202).send(newPerson);
 });
 
 const PORT = 3001;
