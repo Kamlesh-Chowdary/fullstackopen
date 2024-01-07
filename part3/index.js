@@ -70,7 +70,6 @@ app.post("/api/persons/", (req, res) => {
       error: "name must be unique",
     });
   }
-
   const maxId = persons.length > 0 ? Math.max(...persons.map((p) => p.id)) : 0;
   newPerson.id = maxId + 1;
   persons = persons.concat(newPerson);
