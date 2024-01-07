@@ -74,7 +74,7 @@ app.post("/api/persons/", (req, res) => {
   const maxId = persons.length > 0 ? Math.max(...persons.map((p) => p.id)) : 0;
   newPerson.id = maxId + 1;
   persons = persons.concat(newPerson);
-  res.status(202).send(newPerson);
+  res.status(200).send(newPerson);
 });
 const unknownEndPoint = (req, res) => {
   res.status(404).send({ error: "Unknown End Point" });
