@@ -1,9 +1,13 @@
 const express = require("express");
 const app = express();
-const morgan = require("morgan")
+const morgan = require("morgan");
 app.use(express.json());
-morgan.token('body', (request) => JSON.stringify(request.body));
-app.use(morgan('tiny'))
+morgan.token("body", (request) => JSON.stringify(request.body));
+app.use(
+  morgan(":method :body :status :res[content-length] - :response-time ms")
+);
+app.use(morgan("tiny"));
+
 let persons = [
   {
     id: 1,
@@ -72,9 +76,9 @@ app.post("/api/persons/", (req, res) => {
   persons = persons.concat(newPerson);
   res.status(202).send(newPerson);
 });
-const unknownEndPoint = (req, res)=>{
-  res.status(404).send({error: "Unknown End Point"});
-}
+const unknownEndPoint = (req, res) => {
+  res.status(404).send({ error: "Unknown End Point" });
+};
 
 app.use(unknownEndPoint);
 const PORT = 3001;
