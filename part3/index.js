@@ -32,7 +32,11 @@ let persons = [
     number: "39-23-6423122",
   },
 ];
-
+app.get("/", (req, res) => {
+  res.send(
+    "<h1>add '/api/persons' to this link and see the backend server live.</h1>"
+  );
+});
 app.get("/api/persons", (req, res) => {
   res.json(persons);
 });
