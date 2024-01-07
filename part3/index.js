@@ -77,7 +77,7 @@ app.post("/api/persons/", (req, res) => {
   res.status(200).send(newPerson);
 });
 const unknownEndPoint = (req, res) => {
-  res.status(404).send({ error: "Unknown End Point" });
+  res.status(404).send({ error: "Unknown End Point hai re baba" });
 };
 
 app.use(unknownEndPoint);
