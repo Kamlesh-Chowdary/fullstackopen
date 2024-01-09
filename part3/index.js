@@ -1,7 +1,10 @@
+require("dotenv").config();
 const express = require("express");
 const app = express();
 const CORS = require("cors");
 const morgan = require("morgan");
+const Person = require("./models/person");
+
 app.use(CORS());
 app.use(express.static("dist"));
 app.use(express.json());
