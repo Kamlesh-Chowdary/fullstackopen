@@ -1,32 +1,21 @@
 const mongoose = require("mongoose");
-
 const password = process.argv[2];
+const URI = `mongodb+srv://kamlesh:${password}@cluster0.ovhquw0.mongodb.net/?retryWrites=true&w=majority`;
 
-const url = `mongodb+srv://kamlesh:${password}@cluster0.ovhquw0.mongodb.net/?retryWrites=true&w=majority`;
-mongoose.connect(url);
 mongoose.set("strictQuery", false);
-const entrySchema = mongoose.Schema({
+mongoose.connect(URI);
+const personSchema = new mongoose.Schema({
   name: String,
-  number: Number,
+  number: String,
 });
 
-const Entry = mongoose.model("entry", entrySchema);
-const entry = Entry({
+const People = mongoose.model("Person", personSchema);
+
+const Person = new People({
   name: process.argv[3],
   number: process.argv[4],
 });
 
-if (process.argv.length < 4) {
-  Entry.find({}).then((result) => {
-    console.log("Phonebook:");
-    result.forEach((element) => {
-      console.log(`${element.name} ${element.number}`);
-    });
-    mongoose.connection.close();
-  });
-} else {
-  entry.save().then((res) => {
-    console.log(`added ${entry.name} number ${entry.number} to phonebook`);
-    mongoose.connection.close();
-  });
-}
+Person.save().then((result) => {
+  mongoose.connection().close();
+});
