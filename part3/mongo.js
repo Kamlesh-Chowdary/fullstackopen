@@ -10,10 +10,10 @@ const personSchema = new mongoose.Schema({
 });
 
 const People = mongoose.model("Person", personSchema);
-
+const { name, number } = { name: process.argv[3], number: process.argv[4] };
 const Person = new People({
-  name: process.argv[3],
-  number: process.argv[4],
+  name,
+  number,
 });
 
 Person.save().then((result) => {
