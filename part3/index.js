@@ -37,7 +37,9 @@ let persons = [
 ];
 
 app.get("/api/persons", (req, res) => {
-  res.json(persons);
+  Person.find({}).then((initialNumbers) => {
+    res.json(initialNumbers);
+  });
 });
 
 app.get("/info", (req, res) => {
@@ -48,12 +50,13 @@ app.get("/info", (req, res) => {
 
 app.get("/api/persons/:id", (req, res) => {
   const id = Number(req.params.id);
-  const person = persons.find((p) => p.id === id);
-  if (person) {
-    res.send(person);
-  } else {
-    res.status(404).send("This url can't be reached");
-  }
+  Person.findById(id)
+    .then((number) => {
+      res.send(number);
+    })
+    .catch((error) => {
+      res.send(error.message);
+    });
 });
 
 app.delete("/api/persons/:id", (req, res) => {
@@ -63,22 +66,31 @@ app.delete("/api/persons/:id", (req, res) => {
 });
 
 app.post("/api/persons/", (req, res) => {
-  const newPerson = req.body;
-  if (!newPerson.name || !newPerson.number) {
+  const body = req.body;
+
+  if (!body.name || !body.number) {
     return res.status(400).json({
       error: "The name or number is missing",
     });
-  } else if (
-    persons.find((p) => p.name.toLowerCase() === newPerson.name.toLowerCase())
-  ) {
+  } else if (Person.find({ name: new RegExp(body.name, "i") })) {
     return res.status(400).json({
-      error: "name must be unique",
+      error: "Name must be unique",
     });
   }
-  const maxId = persons.length > 0 ? Math.max(...persons.map((p) => p.id)) : 0;
-  newPerson.id = maxId + 1;
-  persons = persons.concat(newPerson);
-  res.status(200).send(newPerson);
+  const number = new Person({
+    name: body.name,
+    number: body.number,
+  });
+
+  number.save().then((newNumber) => {
+    res.status(200).send(newNumber);
+  });
+  //  else if (
+  //   persons.find((p) => p.name.toLowerCase() === newPerson.name.toLowerCase())
+  // ) {
+  //   return res.status(400).json({
+  //     error: "name must be unique",
+  //   });
 });
 const unknownEndPoint = (req, res) => {
   res.status(404).send({ error: "Unknown End Point" });
