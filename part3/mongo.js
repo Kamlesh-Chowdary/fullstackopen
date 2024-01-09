@@ -15,17 +15,17 @@ const People = mongoose.model("Person", personSchema);
 
 const Person = new People({ name, number });
 
-if (process.argv.length < 3) {
+if (process.argv.length < 4) {
   console.log("phonebook:");
-  Person.find({}).then((res) => {
+  People.find({}).then((res) => {
     res.forEach((p) => {
       console.log(p.name, p.number);
     });
-    mongoose.connection().close();
+    mongoose.connection.close();
+  });
+} else {
+  Person.save().then((result) => {
+    console.log(`Added ${name}'s number ${number} to phonebook`);
+    mongoose.connection.close();
   });
 }
-
-Person.save().then((result) => {
-  console.log(`Added ${name}'s number ${number} to phonebook`);
-  mongoose.connection.close();
-});
