@@ -49,13 +49,14 @@ app.get("/info", (req, res) => {
 });
 
 app.get("/api/persons/:id", (req, res) => {
-  const id = Number(req.params.id);
+  const id = req.params.id;
+  console.log(id);
   Person.findById(id)
     .then((number) => {
       res.send(number);
     })
     .catch((error) => {
-      res.send(error.message);
+      res.send("Error : Wrong ID");
     });
 });
 
@@ -72,11 +73,12 @@ app.post("/api/persons/", (req, res) => {
     return res.status(400).json({
       error: "The name or number is missing",
     });
-  } else if (Person.find({ name: new RegExp(body.name, "i") })) {
-    return res.status(400).json({
-      error: "Name must be unique",
-    });
   }
+  // else if (!Person.find({ name: new RegExp(body.name, "i") })) {
+  //   return res.status(400).json({
+  //     error: "Name must be unique",
+  //   });
+  // }
   const number = new Person({
     name: body.name,
     number: body.number,
