@@ -42,10 +42,16 @@ app.get("/api/persons", (req, res) => {
   });
 });
 
-app.get("/info", (req, res) => {
-  const date = Date();
-  const data = `<p>Phonebook has info for ${persons.length} people</p><p>${date}</p>`;
-  res.send(data);
+app.get("/info", async (req, res) => {
+  try {
+    const date = Date();
+    const count = await Person.countDocuments();
+    const data = `<p>Phonebook has info for ${count} people</p><p>${date}</p>`;
+    res.send(data);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
 });
 
 app.get("/api/persons/:id", (req, res, next) => {
