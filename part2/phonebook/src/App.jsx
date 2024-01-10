@@ -56,7 +56,7 @@ const App = () => {
           setPersons(persons.concat(returnedNumber));
         })
         .catch((error) => {
-          return error;
+          notifyWith(error.response.data.error, "error");
         });
       notifyWith(`Added ${newName}`);
     }
@@ -91,8 +91,8 @@ const App = () => {
           );
           notifyWith(`Phonenumber of ${person.name} has been updated!`);
         })
-        .catch(() => {
-          notifyWith(`${person.name} has already been removed`, "error");
+        .catch((error) => {
+          notifyWith(error.response.data.error, "error");
           setPersons(persons.filter((p) => p.id !== person.id));
         });
     }
