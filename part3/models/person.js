@@ -4,7 +4,7 @@ const URI = process.env.MONGODB_URI;
 mongoose.set("strictQuery", false);
 mongoose
   .connect(URI)
-  .then((res) => {
+  .then(() => {
     console.log("Connected to MongoDB.");
   })
   .catch((error) => {
