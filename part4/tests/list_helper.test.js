@@ -1,8 +1,13 @@
 const listHelper = require("../utils/list_helper");
-
+describe("dummy", () => {
+  test("dummy returns one", () => {
+    const blogs = [];
+    const result = listHelper.dummy(blogs);
+    expect(result).toBe(1);
+  });
+});
 describe("total likes", () => {
   const listWithZeroBlog = [];
-
   const listWithOneBlog = [
     {
       _id: "5a422aa71b54a676234d17f8",
@@ -58,7 +63,6 @@ describe("total likes", () => {
   });
   test("When list has many blogs, equals the likes of that", () => {
     const result = listHelper.totalLikes(listWithManyBlog);
-
     expect(result).toBe(24);
   });
 });
