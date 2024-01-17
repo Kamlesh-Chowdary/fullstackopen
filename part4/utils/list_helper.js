@@ -3,13 +3,26 @@ const dummy = (blogs) => {
 };
 
 const totalLikes = (blogs) => {
-  if (blogs.length === 0) 0;
-  let sum = 0;
-  blogs.map((blog) => (sum += blog.likes));
-  return sum;
+  const reducer = (sum, item) => {
+    return sum + item;
+  };
+  const blogsLikes = blogs.map((blog) => blog.likes);
+  return blogsLikes.reduce(reducer, 0);
+};
+
+const favoriteBlog = (blogs) => {
+  const blogsLikes = blogs.map((blog) => blog.likes);
+  const largestIndex = blogsLikes.indexOf(Math.max(...blogsLikes));
+  const largestInfo = blogs[largestIndex];
+  return {
+    title: largestInfo.title,
+    author: largestInfo.author,
+    likes: largestInfo.likes,
+  };
 };
 
 module.exports = {
   dummy,
   totalLikes,
+  favoriteBlog,
 };
