@@ -93,6 +93,16 @@ test("creating a new blog without url returns 400 Bad Request", async () => {
   await api.post("/api/blogs").send(newBlog).expect(400);
 });
 
+test("deleting a blog returns 204 No Content", async () => {
+  const blogsBeforeDelete = await Blog.find({});
+  const blogToDelete = blogsBeforeDelete[0];
+
+  await api.delete(`/api/blogs/${blogToDelete.id}`).expect(204);
+
+  const blogsAfterDelete = await api.get("/api/blogs");
+  expect(blogsAfterDelete.body).toHaveLength(initialBlog.length - 1);
+});
+
 afterAll(async () => {
   await mongoose.connection.close();
 });
