@@ -40,6 +40,24 @@ test("unique identifier property of the blog posts is named id", async () => {
   });
 });
 
+test("a valid blog can be added", async () => {
+  const newBlog = {
+    title: "rajj singh",
+    author: "ranmansingh",
+    url: " alampachaad",
+    likes: 50,
+  };
+
+  await api
+    .post("/api/blogs")
+    .send(newBlog)
+    .expect(201)
+    .expect("Content-Type", /application\/json/);
+
+  const response = await api.get("/api/blogs");
+  expect(response.body).toHaveLength(initialBlog.length + 1);
+});
+
 afterAll(async () => {
   await mongoose.connection.close();
 });
