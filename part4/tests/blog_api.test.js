@@ -75,6 +75,24 @@ test("new blog without likes property will be set to 0", async () => {
   const blogLikes = response.body.map((blog) => blog.likes);
   expect(blogLikes).toContain(0);
 });
+
+test("creating a new blog without title returns 400 Bad Request", async () => {
+  const newBlog = {
+    author: "fidensai kakoji",
+    url: "www.lottiloring.com",
+    likes: 40,
+  };
+  await api.post("/api/blogs").send(newBlog).expect(400);
+});
+test("creating a new blog without url returns 400 Bad Request", async () => {
+  const newBlog = {
+    title: "pingali",
+    author: "fidensai kakoji",
+    likes: 40,
+  };
+  await api.post("/api/blogs").send(newBlog).expect(400);
+});
+
 afterAll(async () => {
   await mongoose.connection.close();
 });

@@ -16,8 +16,12 @@ blogsRouter.post("/", (request, response) => {
     likes: body.likes || 0,
   });
 
-  newBlog.save().then((result) => {
-    response.status(201).json(result);
-  });
+  if (newBlog.title === undefined || newBlog.url === undefined) {
+    response.status(400).end();
+  } else {
+    newBlog.save().then((result) => {
+      response.status(201).json(result);
+    });
+  }
 });
 module.exports = blogsRouter;
