@@ -58,6 +58,23 @@ test("a valid blog can be added", async () => {
   expect(response.body).toHaveLength(initialBlog.length + 1);
 });
 
+test("new blog without likes property will be set to 0", async () => {
+  const newBlog = {
+    title: "Tajj darling",
+    author: "fidensai kakoji",
+    url: "jolly rancher",
+  };
+
+  await api
+    .post("/api/blogs")
+    .send(newBlog)
+    .expect(201)
+    .expect("Content-Type", /application\/json/);
+
+  const response = await api.get("/api/blogs");
+  const blogLikes = response.body.map((blog) => blog.likes);
+  expect(blogLikes).toContain(0);
+});
 afterAll(async () => {
   await mongoose.connection.close();
 });
