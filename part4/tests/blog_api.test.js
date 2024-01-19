@@ -10,6 +10,14 @@ test("blogs are returned as json", async () => {
     .expect("Content-Type", /application\/json/);
 });
 
+// test("Unique identifier property should be named id instead of _id", async () => {
+//   const response  = await api.get("/api/blogs");
+//   const blogPosts = response.data;
+//   blogPosts.forEach((blogPost) => {
+//     expect(blogPost.id).toBeDefined();
+//   });
+// });
+
 afterAll(async () => {
   await mongoose.connection.close();
 });
