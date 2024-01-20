@@ -103,6 +103,23 @@ test("deleting a blog returns 204 No Content", async () => {
   expect(blogsAfterDelete.body).toHaveLength(initialBlog.length - 1);
 });
 
+test("the information of a single blog post is updated", async () => {
+  const blogAtStart = await Blog.find({});
+  const blogToUpdate = blogAtStart[0];
+  const newBlog = { ...blogToUpdate, likes: 40 };
+  await api
+    .put(`/api/blogs/${blogToUpdate.id}`)
+    .send(newBlog)
+    .expect(200)
+    .expect("Content-Type", /application\/json/);
+  const blogAtEnd = await Blog.find({});
+
+  const beforeLikes = blogAtStart.map((blog) => blog.likes);
+  const afterLikes = blogAtEnd.map((blog) => blog.likes);
+
+  expect(afterLikes).not.toContain(beforeLikes);
+});
+
 afterAll(async () => {
   await mongoose.connection.close();
 });
