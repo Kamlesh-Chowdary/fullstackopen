@@ -22,6 +22,13 @@ blogsRouter.post("/", async (request, response) => {
     response.status(201).json(result);
   }
 });
+
+blogsRouter.get("/:id", async (req, res) => {
+  const blog = await Blog.findById(req.params.id);
+  if (blog) res.send(result);
+  else res.status(404).end();
+});
+
 blogsRouter.delete("/:id", async (req, res) => {
   const deleteBlog = await Blog.findByIdAndDelete(req.params.id);
   if (deleteBlog) {
