@@ -25,7 +25,7 @@ blogsRouter.post("/", async (request, response) => {
 
 blogsRouter.get("/:id", async (req, res) => {
   const blog = await Blog.findById(req.params.id);
-  if (blog) res.send(result);
+  if (blog) res.send(blog);
   else res.status(404).end();
 });
 
