@@ -3,7 +3,7 @@ const Blog = require("../models/blog");
 const User = require("../models/user");
 const jwt = require("jsonwebtoken");
 blogsRouter.get("/", async (request, response) => {
-  const blogPost = await Blog.find({}).populate("user", {
+  const blogPost = await Blog.find({}).populate("users", {
     username: 1,
     name: 1,
   });
@@ -47,8 +47,9 @@ blogsRouter.delete("/:id", async (req, res) => {
   if (!user) {
     return response.status(401).json({ error: "token missing or invalid" });
   }
+  
   const blog = await Blog.findById(req.params.id);
-  if (blog.user.toString() === user.id) {
+  if (blog.user.toString()=== user.id) {
     await Blog.findByIdAndDelete(req.params.id);
     res.status(204).end();
   } else {
