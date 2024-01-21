@@ -1,9 +1,14 @@
 const usersRouter = require("express").Router();
 const User = require("../models/user");
+const Blog = require("../models/blog");
 const bcrypt = require("bcrypt");
 
 usersRouter.get("/", async (req, res) => {
-  const userDetails = await User.find({});
+  const userDetails = await User.find({}).populate("blogs", {
+    title: 1,
+    author: 1,
+    url: 1,
+  });
   res.json(userDetails);
 });
 usersRouter.post("/", async (req, res) => {
@@ -31,8 +36,9 @@ usersRouter.post("/", async (req, res) => {
       name: name,
       password: passwordHash,
     });
-    const result = await newUser.save();
-    return res.status(201).json(result);
+    const savedUser = await newUser.save();
+
+    return res.status(201).json(savedUser);
   }
 });
 
