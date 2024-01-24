@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import Blog from "./components/Blog";
 import blogService from "./services/blogs";
 import loginService from "./services/login";
-
+import Notification from "./components/Notification";
 const App = () => {
   const [blogs, setBlogs] = useState([]);
   const [user, setUser] = useState(null);
@@ -12,6 +12,7 @@ const App = () => {
   const [author, setAuthor] = useState("");
   const [url, setUrl] = useState("");
   const [likes, setLikes] = useState("");
+  const [notification, setNotification] = useState({ message: null });
 
   useEffect(() => {
     blogService.getAll().then((blogs) => setBlogs(blogs));
@@ -26,6 +27,15 @@ const App = () => {
     }
   }, []);
 
+  const notifyWith = (message, type = "info") => {
+    setTimeout(() => {
+      setNotification({ message, type });
+    }, 0);
+    setTimeout(() => {
+      setNotification({ message: null });
+    }, 3000);
+  };
+
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
@@ -33,10 +43,11 @@ const App = () => {
       window.localStorage.setItem("LoggedUser", JSON.stringify(user));
       setUser(user);
       blogService.setToken(user.token);
+
       setPassword("");
       setUsername("");
     } catch (error) {
-      console.log("Unauthorized user : Invalid username or passwrod");
+      notifyWith(error.response.data.error, "error");
     }
   };
 
@@ -44,6 +55,7 @@ const App = () => {
     return (
       <>
         <h2>Login in to application</h2>
+        <Notification message={notification} />
         <form onSubmit={handleLogin}>
           <div>
             username:
@@ -83,6 +95,7 @@ const App = () => {
     };
     const result = await blogService.create(newBlog);
     if (result) {
+      notifyWith(`A new blog ${title} by ${author} is added.`);
       setTitle("");
       setAuthor("");
       setUrl("");
@@ -94,6 +107,7 @@ const App = () => {
   return (
     <div>
       <h2>blogs</h2>
+      <Notification message={notification} />
       <p>{user.name} Logged in</p>
       <button type="submit" onClick={handleLogout}>
         logout
