@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-const Blog = ({ blog }) => {
+const Blog = ({ blog, user }) => {
   const [displayFullBlog, setDisplayFullBlog] = useState(false);
 
   const blogStyle = {
@@ -25,7 +25,7 @@ const Blog = ({ blog }) => {
           likes {blog.likes}
           <button>like</button>
           <br />
-          {blog.user[0].username}
+          {user.username}
         </div>
       )}
     </div>

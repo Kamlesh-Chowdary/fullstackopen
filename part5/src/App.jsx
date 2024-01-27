@@ -95,7 +95,7 @@ const App = () => {
       </p>
       <BlogForm notifyWith={notifyWith} setBlogs={setBlogs} />
       {blogs.map((blog) => (
-        <Blog key={blog.id} blog={blog} />
+        <Blog key={blog.id} blog={blog} user={user} />
       ))}
     </div>
   );
