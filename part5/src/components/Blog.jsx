@@ -1,4 +1,8 @@
-const Blog = ({ blog, handleView }) => {
+import { useState } from "react";
+
+const Blog = ({ blog }) => {
+  const [displayFullBlog, setDisplayFullBlog] = useState(false);
+
   const blogStyle = {
     paddingTop: 10,
     paddingLeft: 2,
@@ -7,10 +11,23 @@ const Blog = ({ blog, handleView }) => {
     marginBottom: 5,
   };
 
+  const handleView = () => {
+    setDisplayFullBlog(!displayFullBlog);
+  };
   return (
     <div style={blogStyle}>
       {blog.title} {"===>"} {blog.author}
-      <button onClick={handleView}> view</button>
+      <button onClick={handleView}> {displayFullBlog ? "hide" : "view"}</button>
+      {displayFullBlog && (
+        <div>
+          {blog.url}
+          <br />
+          likes {blog.likes}
+          <button>like</button>
+          <br />
+          {blog.user[0].username}
+        </div>
+      )}
     </div>
   );
 };
