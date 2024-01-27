@@ -33,11 +33,11 @@ const Blog = ({ blog, user, setRefreshBlog, refreshBlog }) => {
   };
 
   return (
-    <div style={blogStyle} className="blog">
+    <div style={blogStyle} className="whenHidden">
       {blog.title} {"===>"} {blog.author}
       <button onClick={handleView}> {displayFullBlog ? "hide" : "view"}</button>
       {displayFullBlog && (
-        <div>
+        <div className="whenShown">
           {blog.url}
           <br />
           likes {blog.likes}
