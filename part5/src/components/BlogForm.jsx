@@ -1,6 +1,6 @@
 import { React, useState } from "react";
 import blogService from "../services/blogs";
-const AddBlog = ({ notifyWith, setBlogs }) => {
+const AddBlog = ({ notifyWith, setBlogs, setRefreshBlog, refreshBlog }) => {
   const [title, setTitle] = useState("");
   const [author, setAuthor] = useState("");
   const [url, setUrl] = useState("");
@@ -22,6 +22,7 @@ const AddBlog = ({ notifyWith, setBlogs }) => {
         clearBlogForm();
         setBlogs((prevBlogs) => [...prevBlogs, result]);
         toggleCreate();
+        setRefreshBlog(!refreshBlog);
       }
     } catch (error) {
       notifyWith(error.response?.data.error || "An error occurred", "error");

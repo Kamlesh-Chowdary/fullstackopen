@@ -10,6 +10,7 @@ const App = () => {
   const [user, setUser] = useState(null);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [refreshBlog, setRefreshBlog] = useState(false);
 
   const [notification, setNotification] = useState({ message: null });
 
@@ -18,7 +19,7 @@ const App = () => {
       blogs.sort((a, b) => b.likes - a.likes);
       setBlogs(blogs);
     });
-  }, []);
+  }, [refreshBlog]);
 
   useEffect(() => {
     const loggedUserJson = window.localStorage.getItem("LoggedUser");
@@ -97,14 +98,19 @@ const App = () => {
           logout
         </button>
       </p>
-      <BlogForm notifyWith={notifyWith} setBlogs={setBlogs} />
+      <BlogForm
+        notifyWith={notifyWith}
+        setBlogs={setBlogs}
+        setRefreshBlog={setRefreshBlog}
+        refreshBlog={refreshBlog}
+      />
       {blogs.map((blog) => (
         <Blog
           key={blog.id}
           blog={blog}
           user={user}
-          setBlogs={setBlogs}
-          blogs={blogs}
+          setRefreshBlog={setRefreshBlog}
+          refreshBlog={refreshBlog}
         />
       ))}
     </div>
