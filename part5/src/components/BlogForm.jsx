@@ -1,4 +1,4 @@
-import { React, useState } from "react";
+import { useState } from "react";
 import blogService from "../services/blogs";
 const AddBlog = ({ notifyWith, setBlogs, setRefreshBlog, refreshBlog }) => {
   const [title, setTitle] = useState("");

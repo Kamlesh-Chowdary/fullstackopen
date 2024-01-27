@@ -15,7 +15,7 @@ const Blog = ({ blog, user, setRefreshBlog, refreshBlog }) => {
       ...blog,
       likes: blog.likes + 1,
     };
-    const updatedBlog = await blogService.update(updateLike);
+    await blogService.update(updateLike);
     setRefreshBlog(!refreshBlog);
   };
   const handleView = () => {
