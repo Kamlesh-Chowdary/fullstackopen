@@ -1,6 +1,6 @@
 import { useState } from "react";
-
-const Blog = ({ blog, user }) => {
+import blogService from "../services/blogs";
+const Blog = ({ blog, user, setBlogs, blogs }) => {
   const [displayFullBlog, setDisplayFullBlog] = useState(false);
 
   const blogStyle = {
@@ -10,7 +10,16 @@ const Blog = ({ blog, user }) => {
     borderWidth: 1,
     marginBottom: 5,
   };
-
+  const increaseLike = async () => {
+    const updateLike = {
+      ...blog,
+      likes: blog.likes + 1,
+    };
+    const updatedBlog = await blogService.update(updateLike);
+    setBlogs((prevBlogs) =>
+      prevBlogs.map((b) => (b.id === updatedBlog.id ? updatedBlog : b))
+    );
+  };
   const handleView = () => {
     setDisplayFullBlog(!displayFullBlog);
   };
@@ -23,7 +32,7 @@ const Blog = ({ blog, user }) => {
           {blog.url}
           <br />
           likes {blog.likes}
-          <button>like</button>
+          <button onClick={increaseLike}>like</button>
           <br />
           {user.username}
         </div>

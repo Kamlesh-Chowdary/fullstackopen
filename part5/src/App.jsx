@@ -10,6 +10,7 @@ const App = () => {
   const [user, setUser] = useState(null);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+
   const [notification, setNotification] = useState({ message: null });
 
   useEffect(() => {
@@ -95,7 +96,13 @@ const App = () => {
       </p>
       <BlogForm notifyWith={notifyWith} setBlogs={setBlogs} />
       {blogs.map((blog) => (
-        <Blog key={blog.id} blog={blog} user={user} />
+        <Blog
+          key={blog.id}
+          blog={blog}
+          user={user}
+          setBlogs={setBlogs}
+          blogs={blogs}
+        />
       ))}
     </div>
   );

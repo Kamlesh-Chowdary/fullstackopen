@@ -4,7 +4,7 @@ const AddBlog = ({ notifyWith, setBlogs }) => {
   const [title, setTitle] = useState("");
   const [author, setAuthor] = useState("");
   const [url, setUrl] = useState("");
-  const [likes, setLikes] = useState("");
+  const [likes, setLikes] = useState(0);
   const [createBlog, setCreateBlog] = useState(false);
   const addNewBlog = async (event) => {
     event.preventDefault();
