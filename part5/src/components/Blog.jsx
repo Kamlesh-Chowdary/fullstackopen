@@ -33,27 +33,32 @@ const Blog = ({ blog, user, setRefreshBlog, refreshBlog }) => {
   };
 
   return (
-    <div style={blogStyle} className="whenHidden">
-      {blog.title} {"===>"} {blog.author}
-      <button onClick={handleView}> {displayFullBlog ? "hide" : "view"}</button>
-      {displayFullBlog && (
-        <div className="whenShown">
-          {blog.url}
-          <br />
-          likes {blog.likes}
-          <button onClick={increaseLike} id="like">
-            like
-          </button>
-          <br />
-          {blog.user[0].name}
-          <br />
-          {blog.user[0].name == user.name && (
-            <button onClick={handleDelete} id="delete-button">
-              delete
+    <div className="blog">
+      <div style={blogStyle} className="whenHidden">
+        {blog.title} {"===>"} {blog.author}
+        <button onClick={handleView}>
+          {" "}
+          {displayFullBlog ? "hide" : "view"}
+        </button>
+        {displayFullBlog && (
+          <div className="whenShown">
+            {blog.url}
+            <br />
+            likes {blog.likes}
+            <button onClick={increaseLike} id="like">
+              like
             </button>
-          )}
-        </div>
-      )}
+            <br />
+            {blog.user[0].name}
+            <br />
+            {blog.user[0].name == user.name && (
+              <button onClick={handleDelete} id="delete-button">
+                delete
+              </button>
+            )}
+          </div>
+        )}
+      </div>
     </div>
   );
 };

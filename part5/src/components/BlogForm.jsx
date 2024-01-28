@@ -40,7 +40,11 @@ const AddBlog = ({ notifyWith, setBlogs, setRefreshBlog, refreshBlog }) => {
     setLikes("");
   };
   if (!createBlog) {
-    return <button onClick={toggleCreate}>new blog</button>;
+    return (
+      <button onClick={toggleCreate} id="newBlog">
+        new blog
+      </button>
+    );
   }
   return (
     <div>
