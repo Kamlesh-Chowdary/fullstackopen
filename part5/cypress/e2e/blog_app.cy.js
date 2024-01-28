@@ -48,4 +48,31 @@ describe("Blog app", function () {
       cy.contains("yusuff Desai ===> Desai Foundation ");
     });
   });
+  describe("and a blog exists", function () {
+    beforeEach(function () {
+      cy.get("#username").type("kamlesh");
+      cy.get("#password").type("kamlesh");
+      cy.get("#login-button").click();
+      cy.contains("new blog").click();
+      cy.get("#title").type("test title");
+      cy.get("#author").type("test author");
+      cy.get("#url").type("http://testurl.com");
+      cy.contains("create").click();
+      cy.contains("test title ===> test author");
+    });
+
+    it("user can add likes", function () {
+      cy.contains("view").click();
+      cy.contains("0").contains("likes");
+      cy.get("#like").click();
+
+      cy.contains("1");
+    });
+    it("user can delete their blogs", function () {
+      cy.contains("view").click();
+      cy.get("#delete-button").click();
+      cy.on("window:confirm", () => true);
+      cy.contains("delete").should("not.exist");
+    });
+  });
 });

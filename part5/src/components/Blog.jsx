@@ -41,11 +41,15 @@ const Blog = ({ blog, user, setRefreshBlog, refreshBlog }) => {
           {blog.url}
           <br />
           likes {blog.likes}
-          <button onClick={increaseLike}>like</button>
+          <button onClick={increaseLike} id="like">
+            like
+          </button>
           <br />
           {user.username}
           <br />
-          <button onClick={handleDelete}>delete</button>
+          <button onClick={handleDelete} id="delete-button">
+            delete
+          </button>
         </div>
       )}
     </div>
