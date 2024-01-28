@@ -1,45 +1,49 @@
-import React from 'react'
-import '@testing-library/jest-dom'
-import { render, screen } from '@testing-library/react'
-import userEvent from '@testing-library/user-event'
-import Blog from './Blog'
+// import React from 'react'
+import "@testing-library/jest-dom";
+import { fireEvent, render, screen } from "@testing-library/react";
+// import userEvent from '@testing-library/user-event'
+import Blog from "./Blog";
 
-test('renders content', () => {
+test("renders content", () => {
   const blog = {
-    "title": 'Component testing is done with react-testing-library',
-    "author": "true",
-    "url":"ahigj",
-    "likes":94,
-  }
+    title: "Component testing is done with react-testing-library",
+    author: "true",
+    url: "ahigj",
+    likes: 94,
+  };
 
-  render(<Blog blog={blog} />)
+  const { container } = render(<Blog blog={blog} />);
+  const div = container.querySelector(".whenHidden");
+  screen.debug(div);
+  expect(div).toHaveTextContent(
+    "Component testing is done with react-testing-library"
+  );
+});
 
-  const element = screen.getByText(/Component testing is done with react-testing-library/i);
-  expect(element).toBeDefined()
-})
+test("content after clicking view button", async () => {
+  const blog = {
+    title: "First class tests",
+    author: "Robert C. Martin",
+    url: "http://localhost.com",
+    likes: 100,
+    user: {
+      id: "kkkk",
+    },
+  };
+  const user = {
+    id: "kkkk",
+    username: "kk",
+  };
 
-test('content after clicking view button', async () => {
-    const blog = {
-      title: 'First class tests',
-      author: 'Robert C. Martin',
-      url: 'hello',
-      likes: 100,
-      user:{
-        id:'kkkk'
-      }
-    }
-    
-  
-    const mockHandler = jest.fn()
+  const { container } = render(<Blog blog={blog} user={user} />);
 
-    render(
-      <Blog blog={blog} handleView={mockHandler} />
-    )
-  
-    const user = userEvent.setup()
-    const button = screen.getByText(/hello/i)
-    await user.click(button)
-  
-    expect(mockHandler.mock.calls).toHaveLength(1)
-  
-  })
+  expect(container).toHaveTextContent("First class tests");
+  expect(container.querySelector(".whenShown")).toBeNull();
+
+  const button = screen.getByText("view");
+  fireEvent.click(button);
+
+  expect(container).toHaveTextContent(blog.url);
+  expect(container).toHaveTextContent(`likes ${blog.likes}`);
+  expect(container).toHaveTextContent(user.username);
+});
