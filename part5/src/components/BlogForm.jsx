@@ -53,6 +53,7 @@ const AddBlog = ({ notifyWith, setBlogs, setRefreshBlog, refreshBlog }) => {
             value={title}
             id="title"
             onChange={({ target }) => setTitle(target.value)}
+            placeholder="write title here"
           />
         </div>
         <div>
@@ -62,6 +63,7 @@ const AddBlog = ({ notifyWith, setBlogs, setRefreshBlog, refreshBlog }) => {
             value={author}
             id="author"
             onChange={({ target }) => setAuthor(target.value)}
+            placeholder="write author here"
           />
         </div>
         <div>
@@ -71,6 +73,7 @@ const AddBlog = ({ notifyWith, setBlogs, setRefreshBlog, refreshBlog }) => {
             value={url}
             id="url"
             onChange={({ target }) => setUrl(target.value)}
+            placeholder="write url here"
           />
         </div>
         <div>

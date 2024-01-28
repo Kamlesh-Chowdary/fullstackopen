@@ -14,7 +14,6 @@ test("renders content", () => {
 
   const { container } = render(<Blog blog={blog} />);
   const div = container.querySelector(".whenHidden");
-  screen.debug(div);
   expect(div).toHaveTextContent(
     "Component testing is done with react-testing-library"
   );
