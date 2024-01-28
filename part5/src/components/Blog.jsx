@@ -45,11 +45,13 @@ const Blog = ({ blog, user, setRefreshBlog, refreshBlog }) => {
             like
           </button>
           <br />
-          {user.username}
+          {blog.user[0].name}
           <br />
-          <button onClick={handleDelete} id="delete-button">
-            delete
-          </button>
+          {blog.user[0].name == user.name && (
+            <button onClick={handleDelete} id="delete-button">
+              delete
+            </button>
+          )}
         </div>
       )}
     </div>

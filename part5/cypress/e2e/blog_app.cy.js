@@ -1,12 +1,20 @@
 describe("Blog app", function () {
   beforeEach(function () {
     cy.request("POST", "http://localhost:3003/api/testing/reset");
-    const newUser = {
-      username: "kamlesh",
+    const user = {
       name: "kamlesh",
+      username: "kamlesh",
       password: "kamlesh",
     };
-    cy.request("POST", "http://localhost:3003/api/users", newUser);
+
+    const usertwo = {
+      name: "two",
+      username: "testusertwo",
+      password: "numbertwo",
+    };
+
+    cy.request("POST", "http://localhost:3003/api/users/", user);
+    cy.request("POST", "http://localhost:3003/api/users/", usertwo);
     cy.visit("http://localhost:5173");
   });
 
@@ -72,6 +80,33 @@ describe("Blog app", function () {
       cy.contains("view").click();
       cy.get("#delete-button").click();
       cy.on("window:confirm", () => true);
+      cy.contains("delete").should("not.exist");
+    });
+  });
+
+  describe("when there are more than one users", function () {
+    beforeEach(function () {
+      cy.get("#username").type("testusertwo");
+      cy.get("#password").type("numbertwo");
+      cy.get("#login-button").click();
+      cy.contains("two Logged in");
+    });
+
+    it("only user who created the blog can delete it", function () {
+      cy.contains("new blog").click();
+      cy.get("#title").type("test title two");
+      cy.get("#author").type("test author two");
+      cy.get("#url").type("http://testurltwo.com");
+      cy.contains("create").click({ force: true });
+      cy.contains("test title two ===> test author two");
+
+      cy.contains("logout").click();
+      cy.get("#username").type("kamlesh");
+      cy.get("#password").type("kamlesh");
+      cy.get("#login-button").click();
+      cy.contains("kamlesh Logged in");
+
+      cy.contains("view").click();
       cy.contains("delete").should("not.exist");
     });
   });

@@ -30,11 +30,12 @@ usersRouter.post("/", async (req, res) => {
         .json({ error: "expected `username` to be unique" });
     }
     const saltRounds = 10;
-    const passwordHash = await bcrypt.hash(password, saltRounds);
+    const hashedPassword = await bcrypt.hash(password, saltRounds);
+
     const newUser = new User({
       username: username,
       name: name,
-      password: passwordHash,
+      passwordHash: hashedPassword,
     });
     const savedUser = await newUser.save();
 
