@@ -30,4 +30,22 @@ describe("Blog app", function () {
       cy.get(".error").should("have.css", "border-style", "solid");
     });
   });
+
+  describe("When logged in", function () {
+    beforeEach(function () {
+      cy.get("#username").type("kamlesh");
+      cy.get("#password").type("kamlesh");
+      cy.get("#login-button").click();
+    });
+
+    it("A blog can be created", function () {
+      cy.contains("new blog").click();
+      cy.get("#title").type("yusuff Desai");
+      cy.get("#author").type("Desai Foundation");
+      cy.get("#url").type("www.desaiFoundation.com");
+      cy.get("#likes").type("900");
+      cy.contains("create").click();
+      cy.contains("yusuff Desai ===> Desai Foundation ");
+    });
+  });
 });
